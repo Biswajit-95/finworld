@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Section from '../components/Section';
 import { ChevronDown, ChevronUp, HelpCircle, Shield, CreditCard, Users, Laptop } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 interface FaqCategory {
   id: string;
@@ -215,9 +216,9 @@ const Faq: React.FC = () => {
                   <a href="mailto:support@finworld.us" className="px-8 py-3 bg-brand-navy text-white rounded-full font-bold hover:bg-brand-dark transition-colors shadow-lg">
                       Email Support
                   </a>
-                  <a href="/contact" className="px-8 py-3 bg-white border border-zinc-300 text-brand-navy rounded-full font-bold hover:border-brand-navy transition-colors">
+                  <Link to="/contact" className="px-8 py-3 bg-white border border-zinc-300 text-brand-navy rounded-full font-bold hover:border-brand-navy transition-colors">
                       Contact Sales
-                  </a>
+                  </Link>
               </div>
           </div>
       </Section>
