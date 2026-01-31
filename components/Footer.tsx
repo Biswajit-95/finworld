@@ -47,12 +47,12 @@ const Footer: React.FC = () => {
           <div className="md:col-span-3">
              <h3 className="text-white font-bold mb-6 text-sm uppercase tracking-wider">Connect</h3>
              <ul className="space-y-4 text-sm text-zinc-400">
-               <li className="flex items-center gap-3 group cursor-pointer">
+               {/* <li className="flex items-center gap-3 group cursor-pointer">
                  <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-brand-cyan group-hover:text-white transition-colors">
                     <Mail className="w-4 h-4 text-zinc-400 group-hover:text-white" />
                  </div>
-                 <a href="mailto:support@finworld.us" className="group-hover:text-white transition-colors">support@finworld.us</a>
-               </li>
+                 <a href="mailto:mark@finworld.us" className="group-hover:text-white transition-colors">mark@finworld.us</a>
+               </li> */}
                <li className="flex items-center gap-3 group cursor-pointer">
                  <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-brand-cyan group-hover:text-white transition-colors">
                     <Phone className="w-4 h-4 text-zinc-400 group-hover:text-white" />

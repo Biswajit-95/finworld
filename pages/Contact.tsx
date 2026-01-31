@@ -63,7 +63,7 @@ const Contact: React.FC = () => {
             
             {/* LEFT COLUMN: Contact Info Cards */}
             <div className="lg:col-span-5 space-y-6">
-                <motion.div 
+                {/* <motion.div 
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.6, delay: 0.2 }}
@@ -75,11 +75,11 @@ const Contact: React.FC = () => {
                             </div>
                             <div>
                                 <h4 className="text-zinc-500 text-xs font-bold uppercase tracking-wider mb-1">Email Support</h4>
-                                <a href="mailto:support@finworld.us" className="text-xl font-bold text-brand-navy hover:text-brand-cyan transition-colors">support@finworld.us</a>
+                                <a href="mailto:mark@finworld.us" className="text-xl font-bold text-brand-navy hover:text-brand-cyan transition-colors">mark@finworld.us</a>
                             </div>
                         </div>
                     </div>
-                </motion.div>
+                </motion.div> */}
 
                 <motion.div 
                     initial={{ opacity: 0, x: -20 }}
