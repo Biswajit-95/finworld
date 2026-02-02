@@ -10,333 +10,334 @@ const HeroCanvas: React.FC = () => {
     const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
-    let animationId: number;
     let width = 0;
     let height = 0;
     let rotation = 0;
-    
-    // Mouse Interaction
-    let mouseX = 0;
-    let mouseY = 0;
-    let targetTiltX = 0;
-    let targetTiltY = 0;
+    let pulse = 0;
+    let animationId: number;
 
-    // CRITICAL: Cap DPR at 2 for performance/memory safety on Retina
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    // --- CONFIGURATION ---
+    const NODE_COUNT = 80; 
+    const CONNECTION_DIST = 0.25; 
+
+    interface Point {
+      x: number;
+      y: number;
+      z: number;
+      type: 'dot' | 'lock' | 'shield';
+      phase: number;
+    }
+
+    const points: Point[] = [];
+
+    // Initialize Fibonacci Sphere
+    const phi = Math.PI * (3 - Math.sqrt(5));
+    for (let i = 0; i < NODE_COUNT; i++) {
+        const y = 1 - (i / (NODE_COUNT - 1)) * 2;
+        const radius = Math.sqrt(1 - y * y);
+        const theta = phi * i;
+        
+        const x = Math.cos(theta) * radius;
+        const z = Math.sin(theta) * radius;
+
+        let type: 'dot' | 'lock' | 'shield' = 'dot';
+        if (i % 12 === 0) type = 'lock';
+        else if (i % 18 === 0) type = 'shield';
+
+        points.push({ x, y, z, type, phase: Math.random() * Math.PI * 2 });
+    }
+
+    // 3D Projection Helper
+    const project = (x: number, y: number, z: number, r: number, cx: number, cy: number, rotX: number, rotY: number) => {
+        // Rotate Y
+        let px = x * Math.cos(rotY) - z * Math.sin(rotY);
+        let pz = x * Math.sin(rotY) + z * Math.cos(rotY);
+        
+        // Rotate X (Tilt)
+        let py = y * Math.cos(rotX) - pz * Math.sin(rotX);
+        let pz2 = y * Math.sin(rotX) + pz * Math.cos(rotX);
+
+        const depth = 2000; // Flatter field of view for cleaner look
+        const scale = depth / (depth - pz2 * r);
+        
+        return {
+            x: cx + px * r * scale,
+            y: cy + py * r * scale,
+            z: pz2,
+            scale,
+            alpha: (pz2 + 1.2) / 2.2 // Smoother fade
+        }; 
+    };
+
+    const drawRing = (cx: number, cy: number, r: number, tilt: number, spin: number, color: string) => {
+        ctx.beginPath();
+        const segments = 90;
+        for(let i=0; i<=segments; i++) {
+            const theta = (i / segments) * Math.PI * 2;
+            const x = Math.cos(theta);
+            const z = Math.sin(theta);
+            
+            // 3D Rotation for ring
+            let px = x * Math.cos(spin) - z * Math.sin(spin);
+            let pz = x * Math.sin(spin) + z * Math.cos(spin);
+            
+            // Tilt
+            let py = pz * Math.sin(tilt);
+            pz = pz * Math.cos(tilt);
+
+            // Project
+            const depth = 2000;
+            const scale = depth / (depth - pz * r);
+            const x2d = cx + px * r * scale;
+            const y2d = cy + py * r * scale;
+
+            if (i===0) ctx.moveTo(x2d, y2d);
+            else ctx.lineTo(x2d, y2d);
+        }
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+    };
+
+    // Draw lines connecting the globe to the screen edges (Security Tethers)
+    const drawTethers = (cx: number, cy: number, r: number, rotation: number) => {
+        const count = 4;
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = 'rgba(0, 144, 212, 0.1)';
+        
+        for(let i=0; i<count; i++) {
+            const angle = (i / count) * Math.PI * 2 + rotation * 0.5;
+            const x = Math.cos(angle) * r;
+            const y = Math.sin(angle) * r;
+            
+            ctx.beginPath();
+            ctx.moveTo(cx + x, cy + y);
+            // Draw to corner or edge
+            const destX = width * (i % 2);
+            const destY = height * (Math.floor(i/2));
+            
+            // Curved line
+            const cpX = cx + x * 2;
+            const cpY = cy + y * 2;
+            
+            ctx.quadraticCurveTo(cpX, cpY, destX, destY);
+            ctx.stroke();
+        }
+    }
+
+    const drawLock = (x: number, y: number, s: number, alpha: number) => {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.scale(s * 1.3, s * 1.3);
+        ctx.globalAlpha = alpha;
+        
+        // Shadow/Glow
+        ctx.shadowColor = 'rgba(0,0,0,0.5)';
+        ctx.shadowBlur = 5;
+
+        // Body (Navy)
+        ctx.fillStyle = '#002F55';
+        ctx.beginPath();
+        ctx.roundRect(-7, -6, 14, 12, 3);
+        ctx.fill();
+        
+        // Outline (Cyan/Gold mix for classy feel)
+        ctx.strokeStyle = '#0090D4'; 
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        
+        // Shackle (Silver)
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(0, -6, 5, Math.PI, 0);
+        ctx.stroke();
+        
+        // Keyhole
+        ctx.fillStyle = '#fff';
+        ctx.beginPath();
+        ctx.arc(0, 0, 2, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+    };
 
     const handleResize = () => {
       width = window.innerWidth;
       height = window.innerHeight;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
       
-      canvas.style.width = `${width}px`;
-      canvas.style.height = `${height}px`;
-
       canvas.width = width * dpr;
       canvas.height = height * dpr;
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
       
       ctx.scale(dpr, dpr);
     };
 
-    const handleMouseMove = (e: MouseEvent) => {
-      const nx = (e.clientX / window.innerWidth) * 2 - 1;
-      const ny = (e.clientY / window.innerHeight) * 2 - 1;
-      mouseX = nx;
-      mouseY = ny;
-    };
-
     handleResize();
     window.addEventListener('resize', handleResize);
-    window.addEventListener('mousemove', handleMouseMove);
-
-    // --- CONFIGURATION ---
-    const NODE_COUNT = 16;
-    const ARC_COUNT = 5; // Simultaneous data beams
-    
-    // Background Particles (Stars)
-    const stars = Array.from({ length: 50 }, () => ({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      size: Math.random() * 1.5,
-      alpha: Math.random() * 0.5 + 0.1,
-      speed: Math.random() * 0.2 + 0.1
-    }));
-
-    // Generate Nodes (Vaults/Relays)
-    const nodes: {lat: number, lon: number, type: 'vault' | 'relay', phase: number}[] = [];
-    for(let i=0; i<NODE_COUNT; i++) {
-        nodes.push({
-            lat: (Math.random() * 160) - 80, 
-            lon: (i / NODE_COUNT) * 360 + Math.random() * 20,
-            type: Math.random() > 0.6 ? 'vault' : 'relay',
-            phase: Math.random() * Math.PI * 2
-        });
-    }
-
-    // Active Data Arcs (Beams connecting nodes)
-    interface Arc {
-      startIdx: number;
-      endIdx: number;
-      progress: number;
-      speed: number;
-    }
-    const arcs: Arc[] = [];
-
-    // Helper: 3D Projection
-    // Returns 3D coordinates and 2D projected screen coordinates
-    const project3D = (lat: number, lon: number, radius: number, center: {x: number, y: number}, rot: number, tiltX: number, tiltY: number) => {
-        const phi = (90 - lat) * (Math.PI / 180);
-        const theta = (lon * Math.PI / 180) + rot + tiltY;
-
-        const x = radius * Math.sin(phi) * Math.cos(theta);
-        const z = radius * Math.sin(phi) * Math.sin(theta);
-        const y = radius * Math.cos(phi);
-
-        // Tilt Axis
-        const tilt = 0.3 + tiltX; 
-        const yRot = y * Math.cos(tilt) - z * Math.sin(tilt);
-        const zRot = y * Math.sin(tilt) + z * Math.cos(tilt);
-
-        const perspective = 1000;
-        const scale = perspective / (perspective + zRot); 
-        
-        return {
-          x3: x, y3: yRot, z3: zRot, // 3D coords for math
-          x: center.x + x * scale,   // 2D screen X
-          y: center.y + yRot * scale,// 2D screen Y
-          scale: scale,
-          visible: true
-        };
-    };
 
     const animate = () => {
-      if (!ctx || !canvas) return;
-      
-      ctx.clearRect(0, 0, width, height);
-      rotation += 0.0015; // Slow rotation
+        if (!ctx) return;
+        ctx.clearRect(0, 0, width, height);
 
-      // Smooth Tilt
-      targetTiltX += (mouseY * 0.2 - targetTiltX) * 0.05;
-      targetTiltY += (mouseX * 0.2 - targetTiltY) * 0.05;
+        const isDesktop = width > 1024;
+        
+        // --- POSITIONING LOGIC ---
+        // Desktop: Right side, vertically centered.
+        // Mobile/Tablet: Top area (42% down), to ensure clearance from navbar.
+        const cx = isDesktop ? width * 0.75 : width * 0.5;
+        const cy = isDesktop ? height * 0.5 : height * 0.42; 
+        
+        // Radius logic
+        // On mobile/tablet, use min(width, height) to ensure landscape tablets don't have massive globes overlapping the top.
+        const minDim = Math.min(width, height);
+        const r = isDesktop ? 280 : minDim * 0.28; 
 
-      // Layout
-      const isDesktop = width > 1024;
-      // Increased size for "Flagship" look (30% larger)
-      const GLOBE_RADIUS = Math.min(width, height) * (isDesktop ? 0.42 : 0.35); 
-      const CENTER = {
-          x: isDesktop ? width * 0.7 : width * 0.5,
-          y: height * 0.5
-      };
+        rotation += 0.0015; // Slow, classy spin
+        pulse += 0.02;
 
-      // 1. Draw Starfield (Background Parallax)
-      stars.forEach(star => {
-          star.y -= star.speed;
-          if (star.y < 0) star.y = height;
-          
-          const parallaxX = mouseX * 20 * star.speed;
-          const parallaxY = mouseY * 20 * star.speed;
-          
-          ctx.beginPath();
-          ctx.arc(star.x + parallaxX, star.y + parallaxY, star.size, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(161, 161, 170, ${star.alpha})`; // Zinc-400
-          ctx.fill();
-      });
+        // Draw Tethers (Background)
+        drawTethers(cx, cy, r, rotation);
 
-      // 2. Atmosphere / Glow
-      const glowRadius = GLOBE_RADIUS * 1.6;
-      const glow = ctx.createRadialGradient(CENTER.x, CENTER.y, GLOBE_RADIUS * 0.8, CENTER.x, CENTER.y, glowRadius);
-      glow.addColorStop(0, 'rgba(0, 144, 212, 0.12)'); // Inner Cyan
-      glow.addColorStop(0.5, 'rgba(0, 47, 85, 0.05)'); // Mid Navy
-      glow.addColorStop(1, 'rgba(0, 0, 0, 0)');
-      
-      ctx.fillStyle = glow;
-      ctx.fillRect(0, 0, width, height);
+        // Security Ring 1 (Orbit)
+        drawRing(cx, cy, r * 1.4, 0.4, rotation * 0.5, 'rgba(0, 47, 85, 0.1)');
+        
+        const projPoints = points.map(p => ({
+            ...p,
+            proj: project(p.x, p.y, p.z, r, cx, cy, 0.1, rotation)
+        }));
 
-      // --- RENDERING HELPERS ---
-      
-      // Calculate all node positions first
-      const projectedNodes = nodes.map(n => ({
-          ...n,
-          pos: project3D(n.lat, n.lon, GLOBE_RADIUS, CENTER, rotation, targetTiltX, targetTiltY)
-      }));
+        projPoints.sort((a, b) => a.proj.z - b.proj.z);
 
-      // 3. Draw Grid (Meridians & Parallels)
-      ctx.lineWidth = 1.5;
-      
-      // Meridians
-      for (let i = 0; i < 24; i++) {
-        const lon = (i / 24) * 360;
+        const back = projPoints.filter(p => p.proj.z < 0);
+        const front = projPoints.filter(p => p.proj.z >= 0);
+
+        // --- BACK HEMISPHERE ---
+        back.forEach((p, i) => {
+             points.forEach((p2, j) => {
+                 if (i <= j) return; 
+                 const dx = p.x - p2.x;
+                 const dy = p.y - p2.y;
+                 const dz = p.z - p2.z;
+                 if (dx*dx + dy*dy + dz*dz < CONNECTION_DIST) {
+                     const pp2 = project(p2.x, p2.y, p2.z, r, cx, cy, 0.1, rotation);
+                     if (pp2.z < 0.2) { 
+                         ctx.strokeStyle = 'rgba(0, 47, 85, 0.08)'; // Very subtle back lines
+                         ctx.lineWidth = 0.5;
+                         ctx.beginPath();
+                         ctx.moveTo(p.proj.x, p.proj.y);
+                         ctx.lineTo(pp2.x, pp2.y);
+                         ctx.stroke();
+                     }
+                 }
+             });
+        });
+
+        // --- CORE TEXT ---
+        ctx.save();
+        ctx.translate(cx, cy);
+        
+        // 1. Atmosphere Glow
+        const glow = ctx.createRadialGradient(0,0,0,0,0,r*0.9);
+        glow.addColorStop(0, 'rgba(255,255,255, 0.95)');
+        glow.addColorStop(0.5, 'rgba(255,255,255, 0.7)');
+        glow.addColorStop(1, 'rgba(255,255,255, 0)');
+        ctx.fillStyle = glow;
         ctx.beginPath();
-        let isFrontLine = false;
+        ctx.arc(0,0,r*0.9,0,Math.PI*2);
+        ctx.fill();
 
-        for (let lat = -90; lat <= 90; lat += 5) {
-           const p = project3D(lat, lon, GLOBE_RADIUS, CENTER, rotation, targetTiltX, targetTiltY);
-           if (lat === -90) {
-               ctx.moveTo(p.x, p.y);
-           } else {
-               ctx.lineTo(p.x, p.y);
-           }
-           if (lat === 0) isFrontLine = p.z3 < 0;
-        }
+        // 2. Text
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        
+        // "FINWORLD" - Classy Navy
+        ctx.font = `900 ${isDesktop ? '40px' : '28px'} "Manrope", sans-serif`;
+        ctx.fillStyle = '#002F55'; 
+        ctx.fillText('FINWORLD', 0, isDesktop ? -8 : -5);
+        
+        // "SECURE VAULT"
+        ctx.font = `700 ${isDesktop ? '11px' : '9px'} "Inter", sans-serif`;
+        ctx.letterSpacing = '0.35em';
+        ctx.fillStyle = '#0090D4'; 
+        ctx.fillText('SECURE VAULT', 0, isDesktop ? 24 : 18);
+        ctx.restore();
 
-        if (isFrontLine) {
-            ctx.strokeStyle = 'rgba(0, 144, 212, 0.15)'; // Cyan Front
-            ctx.setLineDash([]);
-        } else {
-            ctx.strokeStyle = 'rgba(0, 47, 85, 0.08)'; // Navy Back (very dim)
-            ctx.setLineDash([4, 8]);
-        }
-        ctx.stroke();
-      }
+        // --- FRONT HEMISPHERE ---
+        // Security Ring 2 (Foreground Orbit)
+        drawRing(cx, cy, r * 1.6, -0.3, -rotation * 0.3, 'rgba(0, 144, 212, 0.15)');
 
-      // Parallels
-      for (let i = 1; i < 12; i++) {
-        const lat = -90 + (i / 12) * 180;
-        ctx.beginPath();
-        for (let l = 0; l <= 360; l += 5) {
-            const p = project3D(lat, l, GLOBE_RADIUS, CENTER, rotation, targetTiltX, targetTiltY);
-            if (l === 0) ctx.moveTo(p.x, p.y);
-            else ctx.lineTo(p.x, p.y);
-        }
-        ctx.strokeStyle = 'rgba(0, 144, 212, 0.06)';
-        ctx.setLineDash([]);
-        ctx.stroke();
-      }
+        front.forEach((p) => {
+             points.forEach((p2) => {
+                 const dx = p.x - p2.x;
+                 const dy = p.y - p2.y;
+                 const dz = p.z - p2.z;
+                 if (dx*dx + dy*dy + dz*dz < CONNECTION_DIST) {
+                     const pp2 = project(p2.x, p2.y, p2.z, r, cx, cy, 0.1, rotation);
+                     if (pp2.z > -0.2) { 
+                         // Dynamic Scan Line Effect
+                         const distFromCenter = Math.abs(p.y); 
+                         const scan = Math.sin(pulse - distFromCenter * 3) > 0.9;
+                         
+                         const alpha = Math.min(p.proj.alpha, (pp2.z + 1.2)/2.2);
+                         
+                         if (scan) {
+                             ctx.strokeStyle = `rgba(0, 144, 212, ${alpha})`;
+                             ctx.lineWidth = 1.5;
+                         } else {
+                             ctx.strokeStyle = `rgba(0, 144, 212, ${alpha * 0.15})`;
+                             ctx.lineWidth = 1;
+                         }
+                         
+                         ctx.beginPath();
+                         ctx.moveTo(p.proj.x, p.proj.y);
+                         ctx.lineTo(pp2.x, pp2.y);
+                         ctx.stroke();
+                     }
+                 }
+             });
+        });
 
-      // 4. Data Arcs (Beams) management
-      // Spawn new arcs
-      if (arcs.length < ARC_COUNT && Math.random() < 0.03) {
-          const start = Math.floor(Math.random() * nodes.length);
-          let end = Math.floor(Math.random() * nodes.length);
-          if (start !== end) {
-              arcs.push({ startIdx: start, endIdx: end, progress: 0, speed: 0.01 + Math.random() * 0.01 });
-          }
-      }
+        front.forEach(p => {
+             const alpha = p.proj.alpha;
+             const s = p.proj.scale;
+             
+             if (p.type === 'lock') {
+                 drawLock(p.proj.x, p.proj.y, s, alpha);
+             } else if (p.type === 'shield') {
+                 ctx.save();
+                 ctx.translate(p.proj.x, p.proj.y);
+                 ctx.scale(s*1.2, s*1.2);
+                 ctx.fillStyle = '#0090D4';
+                 ctx.beginPath();
+                 ctx.arc(0, 0, 4, 0, Math.PI*2);
+                 ctx.fill();
+                 ctx.restore();
+             } else {
+                 // Standard Node
+                 ctx.fillStyle = '#0090D4';
+                 ctx.beginPath();
+                 ctx.arc(p.proj.x, p.proj.y, 2 * s, 0, Math.PI*2);
+                 ctx.fill();
+                 
+                 // White center for tech feel
+                 ctx.fillStyle = '#fff';
+                 ctx.beginPath();
+                 ctx.arc(p.proj.x, p.proj.y, 1 * s, 0, Math.PI*2);
+                 ctx.fill();
+             }
+        });
 
-      // Draw Arcs
-      arcs.forEach((arc, idx) => {
-          arc.progress += arc.speed;
-          if (arc.progress >= 1) {
-              arcs.splice(idx, 1);
-              return;
-          }
-
-          const startNode = projectedNodes[arc.startIdx];
-          const endNode = projectedNodes[arc.endIdx];
-
-          // Only draw if active (simple depth check could be added here)
-          const midZ = (startNode.pos.z3 + endNode.pos.z3) / 2;
-          
-          if (midZ < GLOBE_RADIUS * 0.5) { 
-              const p1 = startNode.pos;
-              const p2 = endNode.pos;
-              
-              // Simple quadratic bezier for "loft" effect
-              const midX = (p1.x + p2.x) / 2;
-              const midY = (p1.y + p2.y) / 2;
-              
-              const dx = midX - CENTER.x;
-              const dy = midY - CENTER.y;
-              const dist = Math.sqrt(dx*dx + dy*dy);
-              
-              const loft = 1.2 + Math.sin(arc.progress * Math.PI) * 0.4;
-              const cpX = CENTER.x + (dx / dist) * (dist * loft);
-              const cpY = CENTER.y + (dy / dist) * (dist * loft);
-
-              // Draw the beam
-              ctx.beginPath();
-              ctx.moveTo(p1.x, p1.y);
-              ctx.quadraticCurveTo(cpX, cpY, p2.x, p2.y);
-              
-              const grad = ctx.createLinearGradient(p1.x, p1.y, p2.x, p2.y);
-              grad.addColorStop(0, 'rgba(0,144,212,0)');
-              grad.addColorStop(0.5, `rgba(0,144,212,${1 - Math.abs(0.5 - arc.progress)*2})`);
-              grad.addColorStop(1, 'rgba(0,144,212,0)');
-              
-              ctx.strokeStyle = grad;
-              ctx.lineWidth = 2 * p1.scale;
-              ctx.setLineDash([]);
-              ctx.stroke();
-
-              // Draw traveling packet
-              const t = arc.progress;
-              const tx = (1-t)*(1-t)*p1.x + 2*(1-t)*t*cpX + t*t*p2.x;
-              const ty = (1-t)*(1-t)*p1.y + 2*(1-t)*t*cpY + t*t*p2.y;
-              
-              ctx.beginPath();
-              ctx.arc(tx, ty, 2 * p1.scale, 0, Math.PI*2);
-              ctx.fillStyle = '#fff';
-              ctx.fill();
-          }
-      });
-
-      // 5. Draw Nodes
-      projectedNodes.forEach(n => {
-          if (n.pos.z3 < 0) { // Front side only
-              const alpha = (1 - (n.pos.z3 / -GLOBE_RADIUS)) * 0.9;
-              
-              // Node Body
-              ctx.beginPath();
-              ctx.arc(n.pos.x, n.pos.y, (n.type === 'vault' ? 3 : 2) * n.pos.scale, 0, Math.PI * 2);
-              ctx.fillStyle = n.type === 'vault' ? '#fff' : '#0090D4';
-              ctx.fill();
-
-              // Pulse Effect
-              const pulse = (Math.sin(Date.now() * 0.003 + n.phase) + 1) * 0.5;
-              if (n.type === 'vault') {
-                  ctx.beginPath();
-                  ctx.arc(n.pos.x, n.pos.y, (4 + pulse * 8) * n.pos.scale, 0, Math.PI * 2);
-                  ctx.strokeStyle = `rgba(0, 144, 212, ${ (1-pulse) * alpha })`;
-                  ctx.lineWidth = 1;
-                  ctx.stroke();
-              }
-          }
-      });
-
-      // 6. Security Rings
-      const drawRing = (rMult: number, rSpeed: number, tilt: number, color: string, width: number, dash: number[]) => {
-          ctx.save();
-          ctx.translate(CENTER.x, CENTER.y);
-          ctx.rotate(rotation * rSpeed + targetTiltY * 0.3);
-          ctx.scale(1, tilt + targetTiltX * 0.1);
-          
-          ctx.beginPath();
-          ctx.arc(0, 0, GLOBE_RADIUS * rMult, 0, Math.PI * 2);
-          ctx.strokeStyle = color;
-          ctx.lineWidth = width;
-          ctx.setLineDash(dash);
-          ctx.stroke();
-
-          // Scanner blip
-          const angle = Date.now() * 0.001 * rSpeed;
-          const bx = Math.cos(angle) * GLOBE_RADIUS * rMult;
-          const by = Math.sin(angle) * GLOBE_RADIUS * rMult;
-          
-          ctx.beginPath();
-          ctx.arc(bx, by, 3, 0, Math.PI*2);
-          ctx.fillStyle = '#fff';
-          ctx.shadowColor = '#0090D4';
-          ctx.shadowBlur = 10;
-          ctx.fill();
-          ctx.shadowBlur = 0;
-
-          ctx.restore();
-      };
-
-      // Inner Ring (Fast)
-      drawRing(1.2, 0.8, 0.3, 'rgba(0, 144, 212, 0.2)', 1.5, [10, 30]);
-      // Outer Ring (Slow)
-      drawRing(1.5, -0.4, 0.2, 'rgba(0, 47, 85, 0.3)', 1, [2, 10]);
-
-      animationId = requestAnimationFrame(animate);
+        animationId = requestAnimationFrame(animate);
     };
 
-    const animStart = requestAnimationFrame(animate);
+    animationId = requestAnimationFrame(animate);
 
     return () => {
-      cancelAnimationFrame(animStart);
       cancelAnimationFrame(animationId);
       window.removeEventListener('resize', handleResize);
-      window.removeEventListener('mousemove', handleMouseMove);
     };
   }, []);
 

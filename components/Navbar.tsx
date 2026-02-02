@@ -197,7 +197,7 @@ const Navbar: React.FC = () => {
               ) : (
                 <Link
                   to="/login"
-                  className="flex items-center gap-2 bg-brand-navy text-white px-6 py-2.5 rounded-full text-sm font-bold hover:bg-brand-dark transition-all hover:shadow-lg transform hover:-translate-y-0.5 shadow-md shadow-brand-navy/20"
+                  className="flex hidden lg:flex items-center gap-2 bg-brand-navy text-white px-6 py-2.5 rounded-full text-sm font-bold hover:bg-brand-dark transition-all hover:shadow-lg transform hover:-translate-y-0.5 shadow-md shadow-brand-navy/20"
                 >
                   Login
                 </Link>
