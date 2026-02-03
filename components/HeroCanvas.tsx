@@ -256,13 +256,14 @@ const HeroCanvas: React.FC = () => {
         // "FINWORLD" - Classy Navy
         ctx.font = `900 ${isDesktop ? '40px' : '28px'} "Manrope", sans-serif`;
         ctx.fillStyle = '#002F55'; 
-        ctx.fillText('FINWORLD', 0, isDesktop ? -8 : -5);
+        ctx.fillText('FinWorld', 0, isDesktop ? -8 : -5);
         
         // "SECURE VAULT"
         ctx.font = `700 ${isDesktop ? '11px' : '9px'} "Inter", sans-serif`;
         ctx.letterSpacing = '0.35em';
         ctx.fillStyle = '#0090D4'; 
-        ctx.fillText('SECURE VAULT', 0, isDesktop ? 24 : 18);
+        ctx.fillText('Securing your world', 0, isDesktop ? 24 : 18);
+        // ctx.fillText('SECURE VAULT', 0, isDesktop ? 24 : 18);
         ctx.restore();
 
         // --- FRONT HEMISPHERE ---

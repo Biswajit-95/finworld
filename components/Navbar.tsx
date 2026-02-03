@@ -67,6 +67,8 @@ const Navbar: React.FC = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  console.log(user);
+
   return (
     <>
       <nav className="fixed top-4 left-0 right-0 z-50 px-4 md:px-6">
@@ -153,39 +155,32 @@ const Navbar: React.FC = () => {
             </div>
 
             {/* CTA Button */}
-            <div className="hidden md:flex items-center">
+            <div className="hidden lg:flex items-center justify-end">
               {user ? (
                 <div className="relative" ref={userRef}>
                   <button
-                    type="button"
                     onClick={() => setUserMenuOpen((s) => !s)}
-                    aria-expanded={userMenuOpen}
-                    aria-haspopup="menu"
-                    className="flex items-center gap-2 bg-white px-3 py-2 rounded-full text-sm font-bold hover:bg-zinc-50 transition-shadow shadow-sm"
+                    className="flex items-center gap-2 bg-white px-3 py-2 rounded-full text-sm font-bold shadow-sm"
                   >
                     <User className="w-5 h-5 text-zinc-700" />
-                    <span className="hidden sm:inline-block text-sm text-zinc-700">
-                      {user.email.split("@")[0]}
+                    <span className="hidden capitalize sm:inline text-zinc-700">
+                      {user.role}
                     </span>
                     <ChevronDown
-                      className={`w-3 h-3 transition-transform ${userMenuOpen ? "rotate-180" : ""}`}
+                      className={`w-3 h-3 transition-transform ${
+                        userMenuOpen ? "rotate-180" : ""
+                      }`}
                     />
                   </button>
 
                   {userMenuOpen && (
-                    <div
-                      role="menu"
-                      className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-zinc-100 py-2 overflow-hidden z-50"
-                    >
-                      <div className="px-4 py-2 text-sm text-zinc-700 font-medium border-b border-zinc-100 break-words">
-                        {user.email}
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-zinc-100 py-2 z-50">
+                      <div className="px-4 py-2 capitalize text-sm font-medium border-b">
+                        {user.role}
                       </div>
                       <button
-                        onClick={() => {
-                          setUserMenuOpen(false);
-                          logout();
-                        }}
-                        className="w-full text-left px-4 py-2 text-sm text-rose-600 hover:bg-rose-50"
+                        onClick={() => logout()}
+                        className="w-full px-4 py-2 text-left text-sm text-rose-600 hover:bg-rose-50"
                       >
                         <div className="flex items-center gap-2">
                           <LogOut className="w-4 h-4" /> Logout
@@ -197,7 +192,7 @@ const Navbar: React.FC = () => {
               ) : (
                 <Link
                   to="/login"
-                  className="flex hidden lg:flex items-center gap-2 bg-brand-navy text-white px-6 py-2.5 rounded-full text-sm font-bold hover:bg-brand-dark transition-all hover:shadow-lg transform hover:-translate-y-0.5 shadow-md shadow-brand-navy/20"
+                  className="bg-brand-navy text-white px-6 py-2.5 rounded-full text-sm font-bold shadow-md"
                 >
                   Login
                 </Link>
@@ -273,8 +268,8 @@ const Navbar: React.FC = () => {
             ))}
             {user ? (
               <div className="space-y-4">
-                <div className="px-4 py-3 bg-zinc-50 rounded-xl text-zinc-700 font-medium break-words">
-                  {user.email}
+                <div className="px-4 py-3 capitalize bg-zinc-50 rounded-xl text-zinc-700 font-medium break-words">
+                  {user.role}
                 </div>
                 <button
                   onClick={() => logout()}

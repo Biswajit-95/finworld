@@ -1,71 +1,58 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+type Role = "advisor" | "broker-dealer";
+
 type User = {
-  email: string;
-  name?: string;
-  token?: string;
+  username: string;
+  role: Role;
+  token: string;
 };
 
 type AuthContextType = {
   user: User | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (username: string, password: string) => Promise<void>;
   logout: () => void;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
 const LOCAL_KEY = "finworld_auth";
+
+/** 🔐 Canonical credentials */
+const CREDENTIALS = [
+  { username: "FinWorld", password: "1234", role: "advisor" as Role },
+  { username: "FinWorld", password: "10987", role: "broker dealer" as Role },
+];
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [user, setUser] = useState<User | null>(() => {
-    try {
-      const raw = localStorage.getItem(LOCAL_KEY);
-      return raw ? JSON.parse(raw) : null;
-    } catch (e) {
-      return null;
-    }
+    const raw = localStorage.getItem(LOCAL_KEY);
+    return raw ? JSON.parse(raw) : null;
   });
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Keep user synced with localStorage
-    const handle = () => {
-      try {
-        const raw = localStorage.getItem(LOCAL_KEY);
-        setUser(raw ? JSON.parse(raw) : null);
-      } catch {
-        setUser(null);
-      }
-    };
+  const login = async (username: string, password: string) => {
+    await new Promise((r) => setTimeout(r, 300)); // simulate latency
 
-    window.addEventListener("storage", handle);
-    return () => window.removeEventListener("storage", handle);
-  }, []);
+    const match = CREDENTIALS.find(
+      (c) => c.username === username && c.password === password
+    );
 
-  const login = async (email: string, password: string) => {
-    // Mocked login — development-only credential check. Replace with a real API later.
-    await new Promise((r) => setTimeout(r, 400)); // simulate latency
-
-    const VALID_EMAIL = "user@finworld.us";
-    const VALID_PASSWORD = "Pass@123";
-
-    if (email === VALID_EMAIL && password === VALID_PASSWORD) {
-      const fakeToken = btoa(`${email}:${Date.now()}`);
-      const newUser: User = {
-        email,
-        name: email.split("@")[0],
-        token: fakeToken,
-      };
-      localStorage.setItem(LOCAL_KEY, JSON.stringify(newUser));
-      setUser(newUser);
-      return;
+    if (!match) {
+      throw new Error("Invalid credentials");
     }
 
-    throw new Error("Invalid email or password");
+    const userData: User = {
+      username: match.username,
+      role: match.role,
+      token: btoa(`${match.role}:${Date.now()}`),
+    };
+
+    localStorage.setItem(LOCAL_KEY, JSON.stringify(userData));
+    setUser(userData);
   };
 
   const logout = () => {
@@ -83,6 +70,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
 export const useAuth = () => {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used within an AuthProvider");
+  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
   return ctx;
 };
