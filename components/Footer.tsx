@@ -14,7 +14,7 @@ const Footer: React.FC = () => {
           {/* Brand */}
           <div className="md:col-span-5 space-y-8">
             <div className="inline-block bg-white p-6 rounded-3xl shadow-xl shadow-black/20">
-                <div className="scale-110 origin-left">
+                <div className="scale-110">
                     <Logo />
                 </div>
             </div>
@@ -57,13 +57,20 @@ const Footer: React.FC = () => {
                  <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-brand-cyan group-hover:text-white transition-colors">
                     <Phone className="w-4 h-4 text-zinc-400 group-hover:text-white" />
                  </div>
-                 <a href="tel:5154443518" className="group-hover:text-white transition-colors">515.444.3518</a>
+                 <a href="tel:5154443518" className="group-hover:text-white transition-colors">515-444-3518</a>
                </li>
                <li className="flex items-start gap-3 group cursor-pointer">
+                  <a
+                    href="https://www.google.com/maps?q=405+Railroad+Pl,+West+Des+Moines,+Iowa+50265"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-start gap-3"
+                  >
                  <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-brand-cyan group-hover:text-white transition-colors mt-1">
                     <MapPin className="w-4 h-4 text-zinc-400 group-hover:text-white" />
                  </div>
                  <span className="group-hover:text-white transition-colors">405 Railroad Pl,<br/>West Des Moines, Iowa 50265</span>
+                 </a>
                </li>
              </ul>
           </div>

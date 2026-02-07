@@ -212,7 +212,7 @@ const About: React.FC = () => {
 
       {/* --- 6. TARGETS (Why Is This Important?) --- */}
       <Section className="bg-zinc-900 text-white relative overflow-hidden">
-          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10"></div>
+          <div className="absolute inset-0  opacity-10"></div>
           <div className="grid lg:grid-cols-2 gap-16 items-start relative z-10">
               {/* Text Content */}
               <div>

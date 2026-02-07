@@ -29,7 +29,7 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <div className="bg-zinc-50 min-h-screen">
+    <div className="bg-zinc-50 min-h-screen pt-24 md:pt-32">
       
       {/* --- HERO HEADER --- */}
       <div className="relative pt-32 pb-48 lg:pb-64 bg-brand-navy overflow-hidden rounded-b-[3rem] mx-2 md:mx-4 shadow-2xl">
@@ -93,7 +93,7 @@ const Contact: React.FC = () => {
                             </div>
                             <div>
                                 <h4 className="text-zinc-500 text-xs font-bold uppercase tracking-wider mb-1">Phone Line</h4>
-                                <a href="tel:5154443518" className="text-xl font-bold text-brand-navy hover:text-brand-cyan transition-colors">515.444.3518</a>
+                                <a href="tel:5154443518" className="text-xl font-bold text-brand-navy hover:text-brand-cyan transition-colors">515-444-3518</a>
                             </div>
                         </div>
                     </div>
@@ -106,6 +106,12 @@ const Contact: React.FC = () => {
                 >
                     <div className="bg-white p-6 rounded-3xl border border-zinc-200 shadow-xl shadow-zinc-200/50 hover:shadow-2xl hover:border-brand-cyan/30 transition-all duration-300 group cursor-default">
                         <div className="flex items-start gap-6">
+                              <a
+                                href="https://www.google.com/maps?q=405+Railroad+Pl,+West+Des+Moines,+Iowa+50265"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-start gap-3"
+                              >
                             <div className="w-14 h-14 bg-zinc-50 rounded-2xl flex items-center justify-center text-brand-navy border border-zinc-100 group-hover:bg-brand-navy group-hover:text-white transition-colors duration-300 shadow-inner flex-shrink-0">
                                 <MapPin className="w-6 h-6" />
                             </div>
@@ -116,6 +122,7 @@ const Contact: React.FC = () => {
                                     West Des Moines, Iowa 50265
                                 </p>
                             </div>
+                            </a>
                         </div>
                     </div>
                 </motion.div>

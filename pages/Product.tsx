@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 const Product: React.FC = () => {
   return (
-    <div className="bg-[#fafafa]">
+    <div className="bg-[#fafafa] pt-24 md:pt-32">
       {/* 1. Hero Section - The Vessel */}
       <div className="relative pt-40 pb-24 md:pt-48 md:pb-32 bg-brand-navy rounded-b-[3rem] mx-2 md:mx-4 shadow-2xl overflow-hidden">
          {/* Background Elements - Low Z-Index */}
@@ -109,7 +109,8 @@ const Product: React.FC = () => {
               <div className="relative rounded-3xl overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] border border-zinc-200 group">
                   <div className="absolute inset-0 bg-brand-navy/5 group-hover:bg-transparent transition-colors duration-500 z-10 pointer-events-none"></div>
                   <img 
-                      src="/laptop.jpeg" 
+                      src="/new_laptop.png" 
+                    //   src="/laptop.jpeg" 
                     //   src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&q=80&w=2000" 
                       alt="FinWorld Secure Mobile Device" 
                       className="w-full h-auto object-cover transform group-hover:scale-[1.02] transition-transform duration-1000"

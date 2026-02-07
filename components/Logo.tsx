@@ -15,7 +15,7 @@ const Logo: React.FC<LogoProps> = ({ className = "", light = false }) => {
            and update the src logic below, or rely on the CSS filter.
       */}
       <img 
-        src="/finWorld_logo.png" 
+        src="/finWorld_bg.png" 
         alt="FinWorld - Securing Your World" 
         className={`h-20 w-auto object-contain transition-all duration-300 rounded-lg ${light ? 'brightness-0 invert' : ''}`}
       />

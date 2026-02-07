@@ -257,24 +257,27 @@ const Faq: React.FC = () => {
             Our support team is available to discuss your specific security
             needs and legacy planning goals.
           </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            {/* <a href="mailto:mark@finworld.us" className="px-8 py-3 bg-brand-navy text-white rounded-full font-bold hover:bg-brand-dark transition-colors shadow-lg">
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+          {/* <a href="mailto:mark@finworld.us" className="px-8 py-3 bg-brand-navy text-white rounded-full font-bold hover:bg-brand-dark transition-colors shadow-lg">
                       Email Support
-                  </a> */}
-            <li className="px-8 py-3 bg-brand-navy flex items-center gap-2 text-white rounded-full font-bold hover:bg-brand-dark transition-colors shadow-lg">
-              <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-brand-cyan group-hover:text-white transition-colors">
-                <Phone className="w-4 h-4 text-zinc-400 group-hover:text-white" />
+                  </a>  */}
+            <a
+              href="tel:5154443518"
+              className="h-12 px-8 bg-brand-navy flex items-center justify-center gap-3 
+               text-white rounded-full font-bold shadow-lg 
+               hover:bg-brand-dark transition-colors"
+            >
+              <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center">
+                <Phone className="w-4 h-4 text-white" />
               </div>
-              <a
-                href="tel:5154443518"
-                className="group-hover:text-white transition-colors"
-              >
-                515.444.3518
-              </a>
-            </li>
+              <span>515-444-3518</span>
+            </a>
+
             <Link
               to="/contact"
-              className="px-8 py-3 bg-white border border-zinc-300 text-brand-navy rounded-full font-bold hover:border-brand-navy transition-colors"
+              className="h-12 px-8 bg-white border border-zinc-300 text-brand-navy 
+               rounded-full font-bold flex items-center justify-center
+               hover:border-brand-navy transition-colors"
             >
               Contact Sales
             </Link>
