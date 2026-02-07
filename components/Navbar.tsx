@@ -380,10 +380,10 @@ const Navbar: React.FC = () => {
     <>
       <nav className="fixed left-0 right-0 z-50">
         <div
-          className={`mx-auto lg:px-6 xl:px-16 backdrop-blur-xl transition-all duration-300
+          className={`mx-auto lg:px-6 xl:px-16 transition-all duration-300
           ${
             scrolled
-              ? "bg-white shadow-[0_8px_32px_rgba(0,0,0,0.12)] border border-white/40"
+              ? "bg-white backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.12)] border border-white/40"
               : "bg-transparent border-transparent shadow-none"
           }`}
         >
