@@ -556,7 +556,7 @@ const RetailClient: React.FC = () => {
                   <div
                     className="w-12 aspect-square flex-shrink-0 
                   rounded-full border-4 border-zinc-100 
-                  bg-white text-brand-navy font-bold 
+                  bg-brand-cyan text-white font-bold 
                   flex items-center justify-center 
                   relative z-10 shadow-md leading-none"
                   >
@@ -579,7 +579,7 @@ const RetailClient: React.FC = () => {
                   <div
                     className="w-12 aspect-square flex-shrink-0 
                   rounded-full border-4 border-zinc-100 
-                  bg-white text-brand-navy font-bold 
+                  bg-brand-navy text-white font-bold 
                   flex items-center justify-center 
                   relative z-10 shadow-md leading-none"
                   >
