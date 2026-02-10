@@ -142,7 +142,7 @@ const Contact: React.FC = () => {
                                 <div className="text-base font-bold text-brand-navy leading-snug">
                                     <div className="flex justify-between gap-4">
                                         <span>Mon - Fri:</span>
-                                        <span>9am - 5pm Open</span>
+                                        <span>9am - 4pm Open</span>
                                     </div>
                                     <div className="flex justify-between gap-4 text-zinc-400">
                                         <span>Sat - Sun:</span>
