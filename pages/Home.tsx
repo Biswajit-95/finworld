@@ -6,26 +6,23 @@ import SpotlightCard from '../components/SpotlightCard';
 import ActiveDefense from '../components/ActiveDefense';
 import { Shield, Key, ChevronRight, Lock, Activity, Layers, ArrowRight, Server, Globe, AlertTriangle, CheckCircle2, UserX, UserCheck, HardDrive, Smartphone } from 'lucide-react';
 import { motion } from 'framer-motion';
+import Globe1 from '@/components/Globe';
 
 const Home: React.FC = () => {
   return (
     <div className="flex flex-col min-h-screen bg-zinc-50">
       
       {/* --- HERO SECTION --- */}
-      <div className="relative min-h-[100dvh] flex flex-col pt-24 lg:pt-32 pb-10 overflow-hidden bg-zinc-50">
+      {/* <div className="relative min-h-[100dvh] flex flex-col pt-24 lg:pt-32 pb-10 overflow-hidden bg-zinc-50">
         
-        {/* Background Gradients */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(0,144,212,0.1),_transparent_40%)] pointer-events-none z-0"></div>
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-zinc-50 to-transparent z-10 pointer-events-none"></div>
 
         <HeroCanvas />
         
-        {/* Main Content Container */}
-        {/* Updated for mobile: Globe is now at top (in canvas) at ~42% height. mt-[55vh] pushes text safely below it. */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 w-full flex-grow flex flex-col justify-start lg:justify-center mt-[55vh] lg:mt-0">
           <div className="grid lg:grid-cols-2 gap-12 items-center h-full">
             
-            {/* Left Content */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
@@ -65,12 +62,90 @@ const Home: React.FC = () => {
               </div>
             </motion.div>
 
-            {/* Right Space - Reserved for Globe Visibility on Desktop */}
             <div className="hidden lg:block h-[500px]"></div>
 
           </div>
         </div>
+      </div> */}
+      <div className="relative min-h-[100dvh] flex flex-col pt-24 lg:pt-32 pb-10 overflow-hidden bg-zinc-50">
+
+{/* Background Gradients */}
+<div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(0,144,212,0.1),_transparent_40%)] pointer-events-none z-0"></div>
+<div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-zinc-50 to-transparent z-10 pointer-events-none"></div>
+
+{/* Globe Layer */}
+<div className="absolute inset-0 z-0 flex items-start lg:items-center justify-center lg:justify-end pointer-events-none">
+  <div className="relative w-[420px] h-[420px] sm:w-[520px] sm:h-[520px] lg:w-[620px] lg:h-[620px] lg:mr-16 mt-10 lg:mt-0">
+
+    {/* Glow halo behind globe */}
+    <div className="absolute inset-0 rounded-full blur-3xl bg-brand-cyan/10"></div>
+
+    <Globe1 />
+  </div>
+</div>
+
+{/* Main Content Container */}
+<div className="relative z-10 max-w-7xl mx-auto px-4 w-full flex-grow flex flex-col justify-start lg:justify-center mt-[55vh] lg:mt-0">
+  <div className="grid lg:grid-cols-2 gap-12 items-center h-full">
+
+    {/* Left Content */}
+    <motion.div
+      initial={{ opacity: 0, x: -30 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      className="max-w-2xl pt-8 lg:pt-0"
+    >
+      <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white border border-brand-cyan/30 shadow-[0_0_15px_rgba(0,144,212,0.15)] text-brand-navy text-xs font-bold uppercase tracking-widest mb-6 md:mb-8 backdrop-blur-md">
+        <span className="relative flex h-2.5 w-2.5">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-cyan opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-cyan"></span>
+        </span>
+        System Operational
       </div>
+
+      <h1 className="font-display text-4xl sm:text-5xl md:text-7xl font-extrabold text-brand-navy mb-6 md:mb-8 tracking-tighter leading-[1.05] drop-shadow-sm">
+        The Digital Vault <br />
+        <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan to-brand-navy">
+          For Your Legacy.
+        </span>
+      </h1>
+
+      <p className="text-lg md:text-xl text-zinc-600 mb-6 max-w-lg font-medium leading-relaxed">
+        FinWorld offers financial industry leaders a tool to support their customers in a secure, easy way.
+      </p>
+
+      <p className="hidden md:block text-zinc-500 mb-10 max-w-lg leading-relaxed text-sm border-l-2 border-brand-cyan pl-4">
+        FinWorld’s purpose is to enhance and simplify the use of technology in the collection of personal data in a safe, simple and secure manner.
+      </p>
+
+      <div className="flex flex-col sm:flex-row gap-4 sm:gap-5">
+        <Link
+          to="/product"
+          className="group relative px-8 py-3.5 md:py-4 bg-brand-navy text-white rounded-xl font-bold text-lg overflow-hidden shadow-xl hover:shadow-2xl hover:shadow-brand-navy/30 transition-all duration-300 transform hover:-translate-y-1 text-center border border-brand-navy"
+        >
+          <div className="absolute inset-0 w-full h-full bg-brand-cyan translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
+          <span className="relative flex items-center justify-center gap-2">
+            View Products
+            <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </span>
+        </Link>
+
+        <Link
+          to="/about"
+          className="px-8 py-3.5 md:py-4 bg-white border border-zinc-300 text-brand-navy rounded-xl hover:bg-zinc-50 hover:border-brand-navy hover:text-brand-navy transition-all duration-300 font-bold text-lg flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:-translate-y-1 text-center"
+        >
+          Learn More
+        </Link>
+      </div>
+    </motion.div>
+
+    {/* Right Space Placeholder for layout balance on desktop */}
+    <div className="hidden lg:block h-[500px]"></div>
+
+  </div>
+</div>
+</div>
+
 
       {/* --- STATS / TICKER --- */}
       <div className="border-y border-brand-navy/10 bg-white overflow-hidden py-5 relative z-20 shadow-sm">

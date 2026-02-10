@@ -14,7 +14,7 @@ const Footer: React.FC = () => {
           {/* Brand */}
           <div className="md:col-span-5 space-y-8">
             <div className="inline-block bg-white p-6 rounded-3xl shadow-xl shadow-black/20">
-                <div className="scale-110">
+                <div className="scale-125">
                     <Logo />
                 </div>
             </div>
