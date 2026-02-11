@@ -67,7 +67,7 @@ const Home: React.FC = () => {
           </div>
         </div>
       </div> */}
-      <div className="relative min-h-[100dvh] flex flex-col pt-24 lg:pt-32 pb-10 overflow-hidden bg-zinc-50">
+      <div className="relative min-h-[100dvh] flex flex-col pt-24 lg:pt-16 pb-10 overflow-hidden bg-zinc-50">
 
 {/* Background Gradients */}
 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(0,144,212,0.1),_transparent_40%)] pointer-events-none z-0"></div>
@@ -75,7 +75,7 @@ const Home: React.FC = () => {
 
 {/* Globe Layer */}
 <div className="absolute inset-0 z-0 flex items-start lg:items-center justify-center lg:justify-end pointer-events-none">
-  <div className="relative w-[420px] h-[420px] sm:w-[520px] sm:h-[520px] lg:w-[620px] lg:h-[620px] lg:mr-16 mt-10 lg:mt-0">
+  <div className="relative w-full h-[420px] sm:w-[520px] sm:h-[520px] lg:w-[620px] lg:h-[620px] lg:mr-16">
 
     {/* Glow halo behind globe */}
     <div className="absolute inset-0 rounded-full blur-3xl bg-brand-cyan/10"></div>
@@ -84,8 +84,8 @@ const Home: React.FC = () => {
   </div>
 </div>
 
-{/* Main Content Container */}
-<div className="relative z-10 max-w-7xl mx-auto px-4 w-full flex-grow flex flex-col justify-start lg:justify-center mt-[55vh] lg:mt-0">
+{/* Main Content */}
+<div className="relative z-10 max-w-7xl mx-auto px-4 w-full flex-grow flex flex-col justify-start lg:justify-center mt-[33vh] md:mt-[38vh] lg:mt-0">
   <div className="grid lg:grid-cols-2 gap-12 items-center h-full">
 
     {/* Left Content */}
@@ -95,12 +95,32 @@ const Home: React.FC = () => {
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       className="max-w-2xl pt-8 lg:pt-0"
     >
-      <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white border border-brand-cyan/30 shadow-[0_0_15px_rgba(0,144,212,0.15)] text-brand-navy text-xs font-bold uppercase tracking-widest mb-6 md:mb-8 backdrop-blur-md">
-        <span className="relative flex h-2.5 w-2.5">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-cyan opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-cyan"></span>
-        </span>
-        System Operational
+
+      {/* Status Badge (Flicker-free version) */}
+      <div
+        className="relative inline-flex items-center gap-3 px-4 py-1.5 rounded-full border border-brand-cyan/30 shadow-[0_0_15px_rgba(0,144,212,0.15)] text-brand-navy text-xs font-bold uppercase tracking-widest mb-6 md:mb-8 transform-gpu will-change-transform"
+        style={{ isolation: "isolate" }}
+      >
+
+        {/* Stable background layer instead of backdrop-blur */}
+        <div className="absolute inset-0 rounded-full bg-white/90"></div>
+
+        {/* Content */}
+        <div className="relative flex items-center gap-3">
+
+          {/* Status indicator */}
+ <span className="relative flex h-2.5 w-2.5 overflow-hidden rounded-full">
+    
+ {/* Ripple — disabled on small screens to prevent flicker */}
+ <span className="hidden sm:inline-flex animate-ping absolute inset-0 rounded-full bg-brand-cyan opacity-60"></span>
+ 
+ {/* Solid dot */}
+ <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-cyan"></span>
+
+</span>
+
+          System Operational
+        </div>
       </div>
 
       <h1 className="font-display text-4xl sm:text-5xl md:text-7xl font-extrabold text-brand-navy mb-6 md:mb-8 tracking-tighter leading-[1.05] drop-shadow-sm">
@@ -139,12 +159,13 @@ const Home: React.FC = () => {
       </div>
     </motion.div>
 
-    {/* Right Space Placeholder for layout balance on desktop */}
+    {/* Right Placeholder */}
     <div className="hidden lg:block h-[500px]"></div>
 
   </div>
 </div>
 </div>
+
 
 
       {/* --- STATS / TICKER --- */}
