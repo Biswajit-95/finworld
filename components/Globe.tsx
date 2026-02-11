@@ -76,6 +76,13 @@ function createLockTexture() {
   return texture;
 }
 
+// Simple 3D noise approximation for continent shaping
+function pseudoNoise(x: number, y: number, z: number) {
+  const s = Math.sin(x * 12.9898 + y * 78.233 + z * 37.719);
+  return s - Math.floor(s);
+}
+
+
 // Seeded random for consistent land placement
 function seededRandom(seed: number) {
   let s = seed;
@@ -124,28 +131,61 @@ function latLonToVec3(lat: number, lon: number, radius: number) {
   );
 }
 
-function generateLandPoints(count: number, radius: number, seed: number) {
-  const rand = seededRandom(seed);
+function generateLandPoints(count: number, radius: number) {
   const positions = new Float32Array(count * 3);
-  for (let i = 0; i < count; i++) {
-    let pick = rand() * totalWeight;
-    let region = regions[0];
-    for (const r of regions) {
-      pick -= r.weight;
-      if (pick <= 0) {
-        region = r;
-        break;
-      }
+
+  let generated = 0;
+
+  while (generated < count) {
+    // Random lat/lon across the globe
+    const lat = Math.random() * 180 - 90;
+    const lon = Math.random() * 360 - 180;
+
+    const v = latLonToVec3(lat, lon, 1);
+
+    // Use noise to decide land vs ocean
+    const n =
+      pseudoNoise(v.x * 2, v.y * 2, v.z * 2) +
+      pseudoNoise(v.x * 4, v.y * 4, v.z * 4) * 0.5;
+
+    // Threshold controls continent size
+    if (n > 0.62) {
+      const p = latLonToVec3(lat, lon, radius);
+
+      positions[generated * 3] = p.x;
+      positions[generated * 3 + 1] = p.y;
+      positions[generated * 3 + 2] = p.z;
+
+      generated++;
     }
-    const lat = region.latMin + rand() * (region.latMax - region.latMin);
-    const lon = region.lonMin + rand() * (region.lonMax - region.lonMin);
-    const v = latLonToVec3(lat, lon, radius);
-    positions[i * 3] = v.x;
-    positions[i * 3 + 1] = v.y;
-    positions[i * 3 + 2] = v.z;
   }
+
   return positions;
 }
+
+
+// function generateLandPoints(count: number, radius: number, seed: number) {
+//   const rand = seededRandom(seed);
+//   const positions = new Float32Array(count * 3);
+//   for (let i = 0; i < count; i++) {
+//     let pick = rand() * totalWeight;
+//     let region = regions[0];
+//     for (const r of regions) {
+//       pick -= r.weight;
+//       if (pick <= 0) {
+//         region = r;
+//         break;
+//       }
+//     }
+//     const lat = region.latMin + rand() * (region.latMax - region.latMin);
+//     const lon = region.lonMin + rand() * (region.lonMax - region.lonMin);
+//     const v = latLonToVec3(lat, lon, radius);
+//     positions[i * 3] = v.x;
+//     positions[i * 3 + 1] = v.y;
+//     positions[i * 3 + 2] = v.z;
+//   }
+//   return positions;
+// }
 
 const cities = [
   { lat: 40.7, lon: -74 },
@@ -206,6 +246,36 @@ function generateArcs() {
   });
 }
 
+function generateCityLights(count: number, radius: number, seed: number) {
+  const rand = seededRandom(seed);
+  const positions = new Float32Array(count * 3);
+
+  for (let i = 0; i < count; i++) {
+    let pick = rand() * totalWeight;
+    let region = regions[0];
+
+    for (const r of regions) {
+      pick -= r.weight;
+      if (pick <= 0) {
+        region = r;
+        break;
+      }
+    }
+
+    // Bias toward coasts and populated latitudes
+    const lat = region.latMin + rand() * (region.latMax - region.latMin);
+    const lon = region.lonMin + rand() * (region.lonMax - region.lonMin);
+
+    const v = latLonToVec3(lat, lon, radius);
+    positions[i * 3] = v.x;
+    positions[i * 3 + 1] = v.y;
+    positions[i * 3 + 2] = v.z;
+  }
+
+  return positions;
+}
+
+
 function RotatingGlobe() {
   const groupRef = useRef<THREE.Group>(null);
   const lockRefs = useRef<(THREE.Sprite | null)[]>([]);
@@ -214,7 +284,7 @@ function RotatingGlobe() {
     const geo = new THREE.BufferGeometry();
     geo.setAttribute(
       "position",
-      new THREE.BufferAttribute(generateLandPoints(8000, 1.006, 42), 3),
+      new THREE.BufferAttribute(generateLandPoints(8000, 1.006), 3),
     );
     return geo;
   }, []);
@@ -223,7 +293,7 @@ function RotatingGlobe() {
     const geo = new THREE.BufferGeometry();
     geo.setAttribute(
       "position",
-      new THREE.BufferAttribute(generateLandPoints(3000, 1.007, 99), 3),
+      new THREE.BufferAttribute(generateCityLights(7000, 1.007, 99), 3),
     );
     return geo;
   }, []);
@@ -260,12 +330,38 @@ function RotatingGlobe() {
   });
 
   return (
-    <group ref={groupRef} rotation={[0.25, 0, 0.08]}>
+    // <group ref={groupRef} rotation={[0.25, 0, 0.08]}>
+    <group 
+    ref={groupRef} 
+    rotation={[0.25, 0, 0.08]} scale={[0.88, 0.88, 0.88]}>
       {/* Ocean sphere */}
       <mesh>
         <sphereGeometry args={[1, 64, 64]} />
         <meshBasicMaterial color="#021a2e" />
       </mesh>
+
+      <mesh>
+  {/* Slightly larger than the globe */}
+  <sphereGeometry args={[1.06, 64, 64]} />
+  <meshBasicMaterial
+    color="#0090d4"
+    transparent
+    opacity={0.08}
+    side={THREE.BackSide} // Important: renders inside surface for halo effect
+    depthWrite={false}
+  />
+</mesh>
+
+<mesh>
+  <sphereGeometry args={[1.12, 64, 64]} />
+  <meshBasicMaterial
+    color="#0090d4"
+    transparent
+    opacity={0.03}
+    side={THREE.BackSide}
+    depthWrite={false}
+  />
+</mesh>
 
       {/* Ocean surface highlight */}
       <mesh>
@@ -297,13 +393,22 @@ function RotatingGlobe() {
 
       {/* City lights layer */}
       <points geometry={cityLightGeo}>
-        <pointsMaterial
+        {/* <pointsMaterial
           color="#f59e0b"
-          size={0.007}
+          size={0.012}
+          // size={0.009}
           sizeAttenuation
           transparent
-          opacity={0.5}
-        />
+          opacity={0.65}
+        /> */}
+        <pointsMaterial
+  color="#ffb347"
+  size={0.010}
+  transparent
+  depthWrite={false}
+  blending={THREE.AdditiveBlending}
+/>
+
       </points>
 
       {/* Financial hub dots */}
@@ -441,10 +546,12 @@ export default function Globe1() {
 
       <Canvas
         camera={{
-          position: [0, 0, isMobile ? 3.5 : 3.2],
+          // position: [0, 0, isMobile ? 3.5 : 3.2],
+          position: [0, 0, isMobile ? 3.8 : 3.5],
           fov: isMobile ? 45 : 40,
           near: 0.1,
-          far: 1000,
+          // far: 1000,
+          far: 2000,
         }}
         style={{ background: "transparent" }}
         gl={{ alpha: true, antialias: true }}
