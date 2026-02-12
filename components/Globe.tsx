@@ -537,10 +537,16 @@ export default function Globe1() {
       {/* Logo overlay - responsive sizing */}
       <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
         <img
-          src={"/finworld-logo.png"}
+          // src={"/finworld-logo.png"}
+          src={"/Group_2.png"}
+
           alt="FinWorld Logo"
-          className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-44 lg:h-44 object-contain drop-shadow-[0_0_50px_rgba(245,158,11,0.5)] animate-pulse"
-          style={{ animationDuration: "3s" }}
+          className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-44 lg:h-44 object-contain drop-shadow-[0_0_50px_rgba(245,158,11,0.5)] opacity-0.8"
+//           className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-44 lg:h-44
+// bg-white/25 backdrop-blur-xs rounded-xl
+// object-contain drop-shadow-[0_0_50px_rgba(245,158,11,0.5)]"
+
+          // style={{ animationDuration: "3s" }}
         />
       </div>
 
