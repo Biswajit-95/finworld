@@ -541,22 +541,16 @@ export default function Globe1() {
           src={"/Group_2.png"}
 
           alt="FinWorld Logo"
-          className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-44 lg:h-44 object-contain drop-shadow-[0_0_50px_rgba(245,158,11,0.5)] opacity-0.8"
-//           className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-44 lg:h-44
-// bg-white/25 backdrop-blur-xs rounded-xl
-// object-contain drop-shadow-[0_0_50px_rgba(245,158,11,0.5)]"
-
-          // style={{ animationDuration: "3s" }}
+          className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-44 lg:h-44 object-contain drop-shadow-[0_0_50px_rgba(245,158,11,0.5)] opacity-0.8 animate-pulse"
+          style={{ animationDuration: "3s" }}
         />
       </div>
 
       <Canvas
         camera={{
-          // position: [0, 0, isMobile ? 3.5 : 3.2],
           position: [0, 0, isMobile ? 3.8 : 3.5],
           fov: isMobile ? 45 : 40,
           near: 0.1,
-          // far: 1000,
           far: 2000,
         }}
         style={{ background: "transparent" }}

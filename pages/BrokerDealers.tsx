@@ -295,14 +295,24 @@ const BrokerDealers: React.FC = () => {
           <div className="max-w-6xl mx-auto relative z-10 grid lg:grid-cols-2 gap-16 items-center">
               <div>
                   <h2 className="font-display text-4xl md:text-5xl font-bold mb-8 tracking-tight">Why Is This Important?</h2>
-                  <div className="bg-white/5 p-8 rounded-3xl border border-white/10 mb-8 backdrop-blur-md hover:bg-white/10 transition-colors duration-500">
-                      <p className="text-2xl font-light leading-relaxed mb-4 text-zinc-100">
-                          Personal attacks are up over <span className="text-red-500 font-bold bg-red-500/10 px-2 rounded">100%</span> on the 55-plus population as of 2023.
-                      </p>
-                      <p className="text-zinc-400 italic text-sm border-l-2 border-red-500 pl-4">
-                          This group of people are targeted because they have the money and are not as computer savvy.
-                      </p>
-                  </div>
+                                    <div className="mb-10 p-6 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm">
+                    <p className="text-white mb-4 font-light text-2xl leading-relaxed">
+                        Cyber-enabled attacks targeting adults aged 60+ are up over{" "}
+                        <span className="text-red-500 font-bold">40%</span> as of 2026.
+                    </p>
+
+                    <p className="text-zinc-400 font-medium italic border-l-2 border-red-500 pl-4 text-sm space-y-2">
+                        <span className="block">
+                        Reported cyber-enabled losses for Americans age 60+ increased about
+                        five-fold from 2020 to 2024 (from ~$966M to ~$4.8B).
+                        </span>
+                        <span className="block">
+                        The number of IC3 complaints from adults age 60+ increased about
+                        40% over the same period.
+                        </span>
+                    </p>
+
+                    </div>
               </div>
 
               <div className="grid sm:grid-cols-2 gap-6">
