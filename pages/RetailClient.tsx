@@ -345,17 +345,23 @@ const RetailClient: React.FC = () => {
             <h2 className="font-display text-4xl font-bold mb-6">
               Why Is This Important?
             </h2>
-            <p className="text-xl mb-8 leading-relaxed">
-              Personal attacks are up over{" "}
-              <span className="text-red-500 font-bold bg-red-500/10 px-2 py-0.5 rounded">
-                100%
-              </span>{" "}
-              on the 55-plus population as of 2023.
-            </p>
-            <p className="text-zinc-400 italic mb-12 border-l-2 border-red-500 pl-4">
-              This group of people are targeted because they have the money and
-              are not as computer savvy.
-            </p>
+            <div className="mb-10 rounded-2xl ">
+              <p className="text-white mb-8 font-light text-xl leading-relaxed">
+                Cyber-enabled attacks targeting adults aged 60+ are up over{" "}
+                <span className="text-red-500 font-bold">40%</span> as of 2026.
+              </p>
+
+              <p className="text-zinc-400 italic border-l-2 border-red-500 pl-4 text-sm space-y-2">
+                <span className="block">
+                  Reported cyber-enabled losses for Americans age 60+ increased
+                  about five-fold from 2020 to 2024 (from ~$966M to ~$4.8B).
+                </span>
+                <span className="block">
+                  The number of IC3 complaints from adults age 60+ increased
+                  about 40% over the same period.
+                </span>
+              </p>
+            </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
               <div className="bg-white/5 p-6 rounded-2xl border border-white/5 hover:bg-white/10 transition-colors">

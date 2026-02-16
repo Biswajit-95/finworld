@@ -217,14 +217,24 @@ const About: React.FC = () => {
               {/* Text Content */}
               <div>
                   <h2 className="font-display text-4xl font-bold mb-8">Why Is This Important?</h2>
-                  <div className="mb-10 bg-white/5 p-8 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
-                      <p className="text-2xl font-light text-zinc-200 mb-6 leading-normal">
-                          Personal attacks are up over <span className="text-red-500 font-bold bg-red-500/10 px-2 py-0.5 rounded">100%</span> on the 55-plus population as of 2023.
-                      </p>
-                      <p className="text-zinc-400 border-l-2 border-red-500 pl-4 italic">
-                          This group of people are targeted because they have the money and are not as computer savvy.
-                      </p>
-                  </div>
+                  <div className="mb-10 p-6 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm">
+                    <p className="text-white mb-4 font-light text-2xl leading-relaxed">
+                        Cyber-enabled attacks targeting adults aged 60+ are up over{" "}
+                        <span className="text-red-500 font-bold">40%</span> as of 2026.
+                    </p>
+
+                    <p className="text-zinc-400 font-medium italic border-l-2 border-red-500 pl-4 text-sm space-y-2">
+                        <span className="block">
+                        Reported cyber-enabled losses for Americans age 60+ increased about
+                        five-fold from 2020 to 2024 (from ~$966M to ~$4.8B).
+                        </span>
+                        <span className="block">
+                        The number of IC3 complaints from adults age 60+ increased about
+                        40% over the same period.
+                        </span>
+                    </p>
+
+                    </div>
 
                   <div className="space-y-6">
                       <div className="flex gap-4 items-start p-6 rounded-2xl bg-zinc-800/50 border border-zinc-700/50 hover:border-zinc-600 transition-colors">
