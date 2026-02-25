@@ -31,8 +31,8 @@ const faqCategories: FaqCategory[] = [
         a: "FinWorld's purpose is to enhance and simplify the use of technology in the collection of personal data in a safe, simple, and secure manner. We provide a digital vault combined with a secured device to safeguard private information and facilitate generational wealth transfer.",
       },
       {
-        q: "Why is this specific to the 55+ demographic?",
-        a: "Statistics show that personal cyber attacks on the 55-plus population have increased by over 100% as of 2023. This group is often targeted because they typically hold significant assets. FinWorld reduces this risk by removing the technical complexity of security.",
+        q: "Why ts this especially important for adults 60+?",
+        a: "Cyber-enabled attacks targeting adults aged 60+ have increased by over 40% as of 2026. Reported losses for this group surged nearly five-fold between 2020 and 2024 — from approximately $966 million to $4.8 billion. Older adults are often targeted because they typically hold significant retirement savings and accumulated assets. FinWorld reduces this risk by removing the technical complexity of digital security, making protection simple and accessible."
       },
       {
         q: "What is the difference between the Intranet, Extranet, and Portal?",

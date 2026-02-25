@@ -67,7 +67,7 @@ const App: React.FC = () => {
                <Route
                 path="/services/broker-dealers"
                 element={
-                  <ProtectedRoute allowedRole="broker dealer">
+                  <ProtectedRoute allowedRole="broker-dealer">
                     <BrokerDealers />
                   </ProtectedRoute>
                 }
@@ -84,7 +84,12 @@ const App: React.FC = () => {
                     <Pricing />
                 }
               />
-              <Route path="/how-to-use" element={<HowToUse />} />
+              <Route path="/how-to-use" element={
+                 <ProtectedRoute>
+                   <HowToUse />
+               </ProtectedRoute>
+                
+                } />
               <Route path="/contact" element={<Contact />} />
               <Route path="/testimonials" element={<Testimonials />} />
               <Route path="/faq" element={<Faq />} />

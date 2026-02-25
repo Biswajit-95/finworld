@@ -18,7 +18,7 @@ const HowToUse: React.FC = () => {
                  <PlayCircle className="w-3 h-3" /> Tutorials
              </div>
              <h1 className="font-display text-4xl md:text-6xl font-bold text-white mb-8 leading-tight drop-shadow-md">
-                 FinWorld <br />Walkthrough Videos
+                 FinWorld <br />Training Videos
              </h1>
              
              <div className="flex flex-col items-center justify-center gap-6">
