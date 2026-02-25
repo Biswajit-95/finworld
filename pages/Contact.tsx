@@ -3,6 +3,7 @@ import Section from '../components/Section';
 import { Mail, Phone, MapPin, ArrowRight, MessageSquare, Send, Clock, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import emailjs from "@emailjs/browser";
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +14,7 @@ const Contact: React.FC = () => {
     message: ''
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,6 +22,42 @@ const Contact: React.FC = () => {
       setIsSubmitted(true);
     }
   };
+
+// const handleSubmit = async (e: React.FormEvent) => {
+//     e.preventDefault();
+  
+//     if (!formData.firstName || !formData.lastName || !formData.email || !formData.message) {
+//       return;
+//     }
+  
+//     try {
+//       setIsLoading(true);
+  
+//       await emailjs.send(
+//         "service_n4vjgkx",
+//         "template_4pvt17d",
+//         // process.env.REACT_APP_EMAILJS_SERVICE_ID!,
+//         // process.env.REACT_APP_EMAILJS_TEMPLATE_ID!,
+//         {
+//           first_name: formData.firstName,
+//           last_name: formData.lastName,
+//           email: formData.email,
+//           role: formData.role,
+//           message: formData.message,
+//         },
+//         "ftB3srVK7W6TymtmO"
+//         // process.env.REACT_APP_EMAILJS_PUBLIC_KEY!
+//       );
+  
+//       setIsSubmitted(true);
+  
+//     } catch (error) {
+//       console.error("Email failed:", error);
+//       alert("Something went wrong. Please try again.");
+//     } finally {
+//       setIsLoading(false);
+//     }
+//   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
