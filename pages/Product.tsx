@@ -4,6 +4,9 @@ import { Laptop, Wifi, Shield, XCircle, Lock, RefreshCw, CheckCircle2 } from 'lu
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
+export const Laptop_link="https://meke3a-q2.myshopify.com/checkouts/cn/hWN9BtHsOucDq37YXYNoc6O9/en-us?_r=AQABouq4s[…]e_id=174122565929&redirect_source=direct_checkout_product"
+export const Subcription_link="https://meke3a-q2.myshopify.com/checkouts/cn/hWN9BvbI2C6N75bqxMsP7whN/en-us?_r=AQABG3J7C[…]e_id=174122565929&redirect_source=direct_checkout_product"
+
 const Product: React.FC = () => {
   return (
     <div className="bg-[#fafafa] pt-24 md:pt-32">
@@ -33,7 +36,7 @@ const Product: React.FC = () => {
                             <span className="px-3 py-1 bg-white/10 border border-white/20 rounded-full text-xs text-brand-cyan font-bold uppercase tracking-wider">Market Price</span>
                         </div>
                         
-                        <Link to="/contact" className="px-10 py-4 bg-white text-brand-navy rounded-full font-bold hover:bg-zinc-100 transition-colors shadow-lg shadow-white/10 hover:shadow-white/20 hover:-translate-y-1 transform duration-200 inline-block text-center">
+                        <Link to={`${Laptop_link}`} target='_blank' className="px-10 py-4 bg-white text-brand-navy rounded-full font-bold hover:bg-zinc-100 transition-colors shadow-lg shadow-white/10 hover:shadow-white/20 hover:-translate-y-1 transform duration-200 inline-block text-center">
                             Order Now
                         </Link>
                     </motion.div>
@@ -87,7 +90,7 @@ const Product: React.FC = () => {
                   Ensure your device remains secure with our annual comprehensive security suite, including EDR updates, encryption maintenance, and administration.
               </p>
               <div className="flex flex-col sm:flex-row justify-center items-center gap-6">
-                 <Link to="/contact" className="inline-flex items-center gap-2 px-8 py-5 bg-brand-cyan text-white rounded-full font-bold text-lg hover:bg-white hover:text-brand-navy transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 duration-200">
+                 <Link to={`${Subcription_link}`} target='_blank' className="inline-flex items-center gap-2 px-8 py-5 bg-brand-cyan text-white rounded-full font-bold text-lg hover:bg-white hover:text-brand-navy transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 duration-200">
                     Start Annual Subscription – $200*
                  </Link>
               </div>

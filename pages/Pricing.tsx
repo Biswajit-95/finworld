@@ -4,6 +4,7 @@ import SpotlightCard from "../components/SpotlightCard";
 import { BadgeCheck, Check, RefreshCw, Users, ArrowRight } from "lucide-react";
 import { motion, Variants } from "framer-motion";
 import { Link } from "react-router-dom";
+import { Laptop_link, Subcription_link } from "./Product";
 
 const Pricing: React.FC = () => {
   /* Container animation
@@ -114,7 +115,8 @@ const Pricing: React.FC = () => {
 
               <div className="mt-8">
                 <Link
-                  to="/contact"
+                  to={`${Laptop_link}`}
+                  target="_blank"
                   className="w-full py-4 bg-brand-navy text-white rounded-xl font-bold block hover:bg-brand-dark transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 duration-200 group"
                 >
                   Order Device{" "}
@@ -138,7 +140,8 @@ const Pricing: React.FC = () => {
 
               <div className="mt-8">
                 <Link
-                  to="/contact"
+                  to={`${Subcription_link}`}
+                  target="_blank"
                   className="w-full py-4 bg-white border-2 border-brand-navy text-brand-navy rounded-xl font-bold block hover:bg-brand-navy hover:text-white transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 duration-200"
                 >
                   Start Subscription
