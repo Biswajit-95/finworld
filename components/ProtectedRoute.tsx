@@ -2,7 +2,7 @@ import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
 
-type Role = "advisor" | "broker-dealer";
+type Role = "advisor" | "broker dealer";
 
 const ProtectedRoute: React.FC<{
   children: React.ReactNode;
