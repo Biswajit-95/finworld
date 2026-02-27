@@ -4,8 +4,10 @@ import { Laptop, Wifi, Shield, XCircle, Lock, RefreshCw, CheckCircle2 } from 'lu
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
-export const Laptop_link="https://meke3a-q2.myshopify.com/checkouts/cn/hWN9BtHsOucDq37YXYNoc6O9/en-us?_r=AQABouq4s[…]e_id=174122565929&redirect_source=direct_checkout_product"
-export const Subcription_link="https://meke3a-q2.myshopify.com/checkouts/cn/hWN9BvbI2C6N75bqxMsP7whN/en-us?_r=AQABG3J7C[…]e_id=174122565929&redirect_source=direct_checkout_product"
+export const Laptop_link="https://finworld-us.myshopify.com/checkouts/cn/hWN9GAgiz8Jt9AS3fRWBZ6TB/en-us?_r=AQAB67BI[…]_id=174122565929&redirect_source=direct_checkout_product"
+// export const Laptop_link="https://meke3a-q2.myshopify.com/checkouts/cn/hWN9BtHsOucDq37YXYNoc6O9/en-us?_r=AQABouq4s[…]e_id=174122565929&redirect_source=direct_checkout_product"
+export const Subcription_link="https://finworld-us.myshopify.com/products/finworld-security-subscription-required"
+// export const Subcription_link="https://meke3a-q2.myshopify.com/checkouts/cn/hWN9BvbI2C6N75bqxMsP7whN/en-us?_r=AQABG3J7C[…]e_id=174122565929&redirect_source=direct_checkout_product"
 
 const Product: React.FC = () => {
   return (
